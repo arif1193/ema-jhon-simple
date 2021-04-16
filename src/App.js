@@ -11,14 +11,20 @@ import {
 import NotFound from './components/NotFound/NotFound';
 import Order from './components/Order/Order';
 import ProductDetail from './components/ProductDetail/ProductDetail';
+import Shipment from './components/Shipment/Shipment';
+import Login from './components/Login/Login';
+import { createContext, useState } from 'react';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
+export const UserContext = createContext();
 
 
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState({});
   return (
-    <div>      
-      <Header></Header>
+    <UserContext.Provider value = {[loggedInUser, setLoggedInUser]}>
       <Router>
+      <Header></Header>
         <Switch>
           <Route path ='/shop'>
           <Shop></Shop>
@@ -29,9 +35,15 @@ function App() {
           <Route path ='/manage'>
               <Order></Order>
           </Route>
-          <Route path ='/Inventory'>
+          <PrivateRoute path ='/Inventory'>
               <Inventory></Inventory>
+          </PrivateRoute>
+          <Route path ='/login'>
+              <Login></Login>
           </Route>
+          <PrivateRoute path ='/shipment'>
+              <Shipment></Shipment>
+          </PrivateRoute>
           <Route exact path ='/'>
               <Shop></Shop>
           </Route>
@@ -47,7 +59,7 @@ function App() {
 
       </Router>
        
-    </div>
+    </UserContext.Provider>
   );
 }
 
